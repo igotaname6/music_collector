@@ -42,6 +42,21 @@ def add_album():
         writer.writerow([artist, album, year, genere, lenght])
 
 
+def find_by_artist(music_list):
+    '''find album by artist name'''
+    artist_name = input("\nEnter an artist name: \n")
+    artist_found = False
+    for records in music_list:
+        if artist_name.upper() == records[0][0].upper():
+            print(records[0][0], "-", records[0][1])
+            artist_found = True
+    if artist_found is False:
+        press_key_to_continue = input("\nThere is no the artist's album in \
+database. Press any key to continue.\n")
+    else:
+        press_key_to_continue = input("\nPress any key to contiune.\n")
+
+
 def menu():
     """menu with input from user"""
     option = input(""" Welcome in the CoolMusic! Choose the action:
@@ -64,12 +79,20 @@ def main():
     records_list = read_csv()
 
     while True:
+        print(records_list)
+        print(len(records_list))
         chosen_option = menu()
+
         if chosen_option == "1":
             add_album()
-            records_list = read_csv() #update records_list after adding new album
+            records_list = read_csv()  # update records_list after adding new album
+
+        elif chosen_option == "2":
+            find_by_artist(records_list)
+
         elif chosen_option == "0":
             sys.exit("Bye, bye! ")
+
         else:
             print("\nChoose an option please. \n")
 
