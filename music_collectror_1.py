@@ -20,7 +20,7 @@ def add_album():
     artist = input("Enter an artist name: \n")
     album = input("Enter an album title: \n")
     year = input("Enter a year in which album was relesed: \n")
-    genere = input("Enter a genere of album: \n")   
+    genere = input("Enter a genere of album: \n")
     lenght = input("Enter lenght of album: \n")
     with open('music.csv', 'a', encoding="utf-8-sig") as csv_file:
         writer = csv.writer(csv_file, delimiter="|")
@@ -28,4 +28,4 @@ def add_album():
 
 
 
-add_album()
+add_album() ssorsaw
