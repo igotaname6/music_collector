@@ -62,13 +62,16 @@ def menu():
 def main():
     check_csv_existing()
     records_list = read_csv()
+
     while True:
         chosen_option = menu()
         if chosen_option == "1":
             add_album()
-            records_list = read_csv()
+            records_list = read_csv() #update records_list after adding new album
         elif chosen_option == "0":
             sys.exit("Bye, bye! ")
+        else:
+            print("\nChoose an option please. \n")
 
 
 
