@@ -41,11 +41,11 @@ def add_album():
         writer.writerow([artist, album, year, genere, lenght])
 
 
-def find_by_artist(music_list):
+def find_album_by_artist(records_list):
     '''find album by artist name'''
     artist_name = input("\nEnter an artist name: \n")
     artist_found = False
-    for record in music_list:
+    for record in records_list:
         if artist_name.upper() == record[0][0].upper():  # checking list form csv
             print(record[0][0], "-", record[0][1])
             artist_found = True
@@ -56,16 +56,16 @@ database. Press any key to continue.\n")
         press_key_to_continue = input("\nPress any key to contiune.\n")
 
 
-def find_by_year(music_list):
+def find_album_by_year(records_list):
     '''find album by year of relase'''
     year_of_relese = input("\nEnter year of album relese: \n")
     while not year_of_relese.isdigit():  # check if entered year is digit/
         year_of_relese = input("\nEnter a propper year: \n")
     year_found = False
-    for record in music_list:
+    for record in records_list:
         if year_of_relese == record[1][0]:
-            print(record[0][0], "-", record[0][1])
-            year_found = True
+            print(record[0][0], "-", record[0][1])  # print artist name and title
+            year_found = True                       # from list
     if year_found is False:
         press_key_to_continue = input("\nThere is no album relesed in this year\
  in database. Press any key to continue.\n")
@@ -73,17 +73,47 @@ def find_by_year(music_list):
         press_key_to_continue = input("\nPress any key to contiune.\n")
 
 
-def find_by_album(music_list):
+def find_artist_by_album(records_list):
     '''finding artist by entered album title'''
     album_name = input("\nEnter an album's title:\n")
     album_found = False
-    for record in music_list:
+    for record in records_list:
         if album_name.upper() == record[0][1].upper():
-            print(record[0][0])
+            print(record[0][0])  # print artist name
             album_found = True
             break
     if album_found is False:
         press_key_to_continue = input("\nThere is no this title \
+in database. Press any key to continue.\n")
+    else:
+        press_key_to_continue = input("\nPress any key to contiune.\n")
+
+
+def find_album_by_letter(records_list):
+    '''finding album by letter or letters.'''
+    letter_to_find = input("\nEnter a letter or letters to find in titles: \n")
+    letter_found = False  # checking if variable is find in records_list
+    for record in records_list:
+        if letter_to_find.upper() in record[0][1].upper():
+            print(record[0][0], "-", record[0][1])
+            letter_found = True
+    if letter_found is False:
+        press_key_to_continue = input("\nThere is no title contains entered letters \
+in database. Press any key to continue.\n")
+    else:
+        press_key_to_continue = input("\nPress any key to contiune.\n")
+
+
+def find_album_by_genere(records_list):
+    '''finding albums by prompted genere'''
+    entered_genere = input("\nEnter a genere to find: \n")
+    genere_found = False
+    for record in records_list:
+        if entered_genere.upper() == record[1][1].upper():
+            print(record[0][0], "-", record[0][1])
+            genere_found = True
+    if genere_found is False:
+        press_key_to_continue = input("\nThere isn't the genere \
 in database. Press any key to continue.\n")
     else:
         press_key_to_continue = input("\nPress any key to contiune.\n")
@@ -109,25 +139,31 @@ def menu():
 def main():
     print("Welcome in the CoolMusic!")
     check_csv_existing()
-    albums_list = read_csv()
+    records_list = read_csv()
 
     while True:
-        print(albums_list)
-        print(len(albums_list))
+        print(records_list)
+        print(len(records_list))
         chosen_option = menu()
 
         if chosen_option == "1":
             add_album()
-            albums_list = read_csv()  # update albums_list after adding new album
+            records_list = read_csv()  # update records_list after adding new album
 
         elif chosen_option == "2":
-            find_by_artist(albums_list)
+            find_album_by_artist(records_list)
 
         elif chosen_option == "3":
-            find_by_year(albums_list)
+            find_album_by_year(records_list)
 
         elif chosen_option == "4":
-            find_by_album(albums_list)
+            find_artist_by_album(records_list)
+
+        elif chosen_option == "5":
+            find_album_by_letter(records_list)
+
+        elif chosen_option == "6":
+            find_album_by_genere(records_list)
 
         elif chosen_option == "0":
             sys.exit("Bye, bye! ")
