@@ -202,8 +202,7 @@ def menu():
      6) Find albums by genre
      7) Calculate the age of all albums
      8) Choose a random album by genre
-     9) Show the amount of albums by an artist *
-     10) Find the longest-time album *
+     9) Show the amount of albums by an artist
      0) Exit \n """)
     return option
 
