@@ -11,8 +11,7 @@ create it, enter Y.").upper()
         if create_file == "Y":
             os.mknod("music.csv")
         else:
-            print("Bye, Bye")
-            sys.exit()
+            sys.exit("Bye, Bye!")
 
 
 def read_csv():
@@ -46,9 +45,9 @@ def find_by_artist(music_list):
     '''find album by artist name'''
     artist_name = input("\nEnter an artist name: \n")
     artist_found = False
-    for records in music_list:
-        if artist_name.upper() == records[0][0].upper():
-            print(records[0][0], "-", records[0][1])
+    for record in music_list:
+        if artist_name.upper() == record[0][0].upper():  # checking list form csv
+            print(record[0][0], "-", record[0][1])
             artist_found = True
     if artist_found is False:
         press_key_to_continue = input("\nThere is no the artist's album in \
@@ -57,9 +56,42 @@ database. Press any key to continue.\n")
         press_key_to_continue = input("\nPress any key to contiune.\n")
 
 
+def find_by_year(music_list):
+    '''find album by year of relase'''
+    year_of_relese = input("\nEnter year of album relese: \n")
+    while not year_of_relese.isdigit():  # check if entered year is digit/
+        year_of_relese = input("\nEnter a propper year: \n")
+    year_found = False
+    for record in music_list:
+        if year_of_relese == record[1][0]:
+            print(record[0][0], "-", record[0][1])
+            year_found = True
+    if year_found is False:
+        press_key_to_continue = input("\nThere is no album relesed in this year\
+ in database. Press any key to continue.\n")
+    else:
+        press_key_to_continue = input("\nPress any key to contiune.\n")
+
+
+def find_by_album(music_list):
+    '''finding artist by entered album title'''
+    album_name = input("\nEnter an album's title:\n")
+    album_found = False
+    for record in music_list:
+        if album_name.upper() == record[0][1].upper():
+            print(record[0][0])
+            album_found = True
+            break
+    if album_found is False:
+        press_key_to_continue = input("\nThere is no this title \
+in database. Press any key to continue.\n")
+    else:
+        press_key_to_continue = input("\nPress any key to contiune.\n")
+
+
 def menu():
     """menu with input from user"""
-    option = input(""" Welcome in the CoolMusic! Choose the action:
+    option = input("""Choose the action:
      1) Add new album
      2) Find albums by artist
      3) Find albums by year
@@ -75,26 +107,33 @@ def menu():
 
 
 def main():
+    print("Welcome in the CoolMusic!")
     check_csv_existing()
-    records_list = read_csv()
+    albums_list = read_csv()
 
     while True:
-        print(records_list)
-        print(len(records_list))
+        print(albums_list)
+        print(len(albums_list))
         chosen_option = menu()
 
         if chosen_option == "1":
             add_album()
-            records_list = read_csv()  # update records_list after adding new album
+            albums_list = read_csv()  # update albums_list after adding new album
 
         elif chosen_option == "2":
-            find_by_artist(records_list)
+            find_by_artist(albums_list)
+
+        elif chosen_option == "3":
+            find_by_year(albums_list)
+
+        elif chosen_option == "4":
+            find_by_album(albums_list)
 
         elif chosen_option == "0":
             sys.exit("Bye, bye! ")
 
         else:
-            print("\nChoose an option please. \n")
+            print("\nChoose an option from list please. \n")
 
 
 
