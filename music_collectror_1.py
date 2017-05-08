@@ -17,18 +17,41 @@ create it, enter Y.").upper()
 
 
 def read_csv():
-    """Read csv file and save data to propper list"""
+    """Check if read csv is broken and save data to propper list"""
     with open('music.csv', 'r', encoding="utf-8-sig") as csv_file:  # save and read only utf8 chars
         reader = csv.reader(csv_file)
         music = []  # list with data read from csv file
-        for line in reader:
-            record = line[0].split("|")
-            record_tuple = (record[0].strip(), record[1].strip()), \
-                (record[2].strip(), record[3].strip(), record[4].strip())
-            # [0] = artist name, [1] = album title, [2] = relese year
-            # [3] = genere, [4] = album lenght
-            music.append(record_tuple)
+        try:
+            for line in reader:
+                record = line[0].split("|")
+                record_tuple = (record[0].strip(), record[1].strip()), \
+                    (record[2].strip(), record[3].strip(), record[4].strip())
+                # [0] = artist name, [1] = album title, [2] = relese year
+                # [3] = genere, [4] = album lenght
+                music.append(record_tuple)
+        except IndexError:
+            print("""music.csv file is broken. Reapir it manually or create a new one.
+Make sure that every record is in one line, and each of five line elements
+is separreted by '|'. Furthermore delete all blank lines""")
+            quit_input = input("\nPress any key to quit\n")
+            sys.exit("Bye, bye!")
     return music
+
+
+def year_checkig(records_list):
+    '''check if albums' releses years are propper integers > 1900'''
+    year_check = True
+    for record in records_list:
+        try:
+            int_from_year = int(record[1][0])
+        except ValueError:
+            print("\nData error: year is not propper integer. Please repair it manually\n")
+            year_check = False
+        if int(record[1][0]) < 1900:
+            print("\nYear of relase can't be smaller than 1900. \
+Please change it manually in csv file\n")
+            year_check = False
+    return year_check
 
 
 def add_album():
@@ -36,8 +59,10 @@ def add_album():
     artist = input("Enter an artist name: \n")
     album = input("Enter an album title: \n")
     year = input("Enter a year in which album was relesed: \n")
+    while not year.isdigit():
+        year = input("inappropriate date. Enter year again: \n")
     genere = input("Enter a genere of album: \n")
-    lenght = input("Enter lenght of album: \n")
+    lenght = input("Enter lenght of album(in format mm:ss): \n").split(":")
     with open('music.csv', 'a', encoding="utf-8-sig") as csv_file:
         writer = csv.writer(csv_file, delimiter="|")
         writer.writerow([artist, album, year, genere, lenght])
@@ -149,6 +174,23 @@ in database. Press any key to continue.\n")
         press_key_to_continue = input("\nPress any key to contiune.\n")
 
 
+def show_amount_by_artist(records_list):
+    '''show amount albums of entered artist'''
+    entered_artist = input("\nEnter an artist name: \n")
+    artist_found = False
+    amount = 0
+    for record in records_list:
+        if entered_artist.upper() == record[0][0].upper():
+            amount += 1
+            artist_found = True
+    if artist_found is False:
+        press_key_to_continue = input("\nThere isn't the artist \
+in database. Press any key to continue.\n")
+    else:
+        print("Total amount of", entered_artist, "albums:", amount)
+        press_key_to_continue = input("\nPress any key to contiune.\n")
+
+
 def menu():
     """menu with input from user"""
     option = input("""Choose the action:
@@ -172,8 +214,6 @@ def main():
     records_list = read_csv()
 
     while True:
-        print(records_list)
-        print(len(records_list))
         chosen_option = menu()
 
         if chosen_option == "1":
@@ -196,20 +236,24 @@ def main():
             find_album_by_genere(records_list)
 
         elif chosen_option == "7":
-            print("\nSum of all albums ages = ", calculate_age_of_albums(records_list), "\n")
-            press_key_to_continue = input("\nPress any key to contiune.\n")
+            year_check = year_checkig(records_list)  # check if it can sum years data
+            if year_check is False:
+                press_key_to_continue = input("\nPress any key to contiune.\n")
+            else:
+                print("\nSum of all albums ages = ", calculate_age_of_albums(records_list), "\n")
+                press_key_to_continue = input("\nPress any key to contiune.\n")
 
         elif chosen_option == "8":
             random_album_by_genere(records_list)
 
-
+        elif chosen_option == "9":
+            show_amount_by_artist(records_list)
 
         elif chosen_option == "0":
             sys.exit("Bye, bye! ")
 
         else:
             print("\nChoose an option from list please. \n")
-
 
 
 if __name__ == '__main__':
