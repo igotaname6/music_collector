@@ -1,6 +1,8 @@
 import csv
 import sys
 import os.path
+import datetime
+import random
 
 
 def check_csv_existing():
@@ -74,7 +76,7 @@ def find_album_by_year(records_list):
 
 
 def find_artist_by_album(records_list):
-    '''finding artist by entered album title'''
+    '''find artist by entered album title'''
     album_name = input("\nEnter an album's title:\n")
     album_found = False
     for record in records_list:
@@ -90,7 +92,7 @@ in database. Press any key to continue.\n")
 
 
 def find_album_by_letter(records_list):
-    '''finding album by letter or letters.'''
+    '''find album by letter or letters.'''
     letter_to_find = input("\nEnter a letter or letters to find in titles: \n")
     letter_found = False  # checking if variable is find in records_list
     for record in records_list:
@@ -105,7 +107,7 @@ in database. Press any key to continue.\n")
 
 
 def find_album_by_genere(records_list):
-    '''finding albums by prompted genere'''
+    '''find albums by prompted genere'''
     entered_genere = input("\nEnter a genere to find: \n")
     genere_found = False
     for record in records_list:
@@ -116,6 +118,34 @@ def find_album_by_genere(records_list):
         press_key_to_continue = input("\nThere isn't the genere \
 in database. Press any key to continue.\n")
     else:
+        press_key_to_continue = input("\nPress any key to contiune.\n")
+
+
+def calculate_age_of_albums(records_list):
+    '''return sum of all albums ages'''
+    current_year = datetime.datetime.now().year
+    ages_sum = 0  # hold a sum of albums' ages
+    for record in records_list:
+        album_age = current_year - int(record[1][0])
+        ages_sum += album_age
+    return ages_sum
+
+
+def random_album_by_genere(records_list):
+    '''return random album by entered genere'''
+    entered_genere = input("\nEnter a genere to find: \n")
+    genere_found = False
+    records_list_to_draw = []      # create list with all records by entered genere
+    for record in records_list:
+        if entered_genere.upper() == record[1][1].upper():  # check if entered genere
+            records_list_to_draw.append(record[0])  # ... is in list and append record to drawing lis
+            genere_found = True
+    if genere_found is False:
+        press_key_to_continue = input("\nThere isn't the genere \
+in database. Press any key to continue.\n")
+    else:
+        random_album = random.choice(records_list_to_draw)
+        print("Random album: ", random_album[0], "-", random_album[1])
         press_key_to_continue = input("\nPress any key to contiune.\n")
 
 
@@ -164,6 +194,15 @@ def main():
 
         elif chosen_option == "6":
             find_album_by_genere(records_list)
+
+        elif chosen_option == "7":
+            print("\nSum of all albums ages = ", calculate_age_of_albums(records_list), "\n")
+            press_key_to_continue = input("\nPress any key to contiune.\n")
+
+        elif chosen_option == "8":
+            random_album_by_genere(records_list)
+
+
 
         elif chosen_option == "0":
             sys.exit("Bye, bye! ")
